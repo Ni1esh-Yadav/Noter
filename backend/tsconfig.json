@@ -1,0 +1,38 @@
+{
+  "compilerOptions": {
+    "typeRoots": [
+      "./node_modules/@types",
+      "./src/types"
+    ],
+    "rootDir": "./src",                                   // Specifies the root directory of input files.
+    "outDir": "./dist",                                   // Specifies the output directory for compiled files.
+    "module": "nodenext",                                 // Recommended for Node.js projects using ECMAScript modules.
+    "target": "esnext",                                   // Sets the JavaScript language version for emitted JavaScript.
+    "lib": ["esnext"],                                    // Specifies a list of bundled library declaration files to be included in the compilation.
+    "types": ["node"],                                    // Specifies type declarations to be included in the compilation.
+    "moduleResolution": "nodenext",                       // This is implicitly set by `module: "nodenext"`, but it's good to be explicit.
+    "esModuleInterop": true,                              // Allows using default imports from modules with no default export.
+    "allowSyntheticDefaultImports": true,                 // Allows synthetic default imports to reduce boilerplate.
+    "forceConsistentCasingInFileNames": true,             // Ensures that file names are consistent in casing.
+    "resolveJsonModule": true,                            // Allows importing `.json` files.
+    "strict": true,                                       // Enables all strict type-checking options.
+    "noUncheckedIndexedAccess": true,                     // Adds `undefined` to types for index signatures.
+    "exactOptionalPropertyTypes": true,                   // Requires explicit `undefined` for optional properties.
+    "noImplicitReturns": true,                            // Report error when not all code paths in function return a value.
+    "noImplicitOverride": true,                           // Ensure functions that override are marked with `override`.
+    "noUnusedLocals": true,                               // Report errors on unused local variables.
+    "noUnusedParameters": true,                           // Report errors on unused parameters.
+    "noFallthroughCasesInSwitch": true,                   // Report errors for fallthrough cases in switch statements.
+    "noPropertyAccessFromIndexSignature": true,           // Enforce dot notation over bracket notation where possible.
+    "verbatimModuleSyntax": true,                         // Enforce module syntax to be preserved verbatim in the output.
+    "isolatedModules": true,                              // Ensure that each file can be compiled as a separate module.
+    "noUncheckedSideEffectImports": true,                 // Prevents imports with side effects.
+    "moduleDetection": "force",                           // Treat all files as modules.
+    "sourceMap": true,                                    // Generates source map files for debugging.
+    "declaration": true,                                  // Generates declaration (`.d.ts`) files.
+    "declarationMap": true,                               // Generates a source map for each declaration file.
+    "skipLibCheck": true,                                 // Skip type checking of declaration files (`.d.ts`).
+    "jsx": "react-jsx"                                    // Specifies how JSX is emitted. Remove if not using React.
+  },
+  "include": ["src/**/*"]                                 // Tells TypeScript which files to include in the compilation.
+}
