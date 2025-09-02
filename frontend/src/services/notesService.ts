@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/notes"; 
+const API_URL = "https://noter-7i82.onrender.com/notes"; 
 
 const authHeader = () => {
   const token = localStorage.getItem("token");
