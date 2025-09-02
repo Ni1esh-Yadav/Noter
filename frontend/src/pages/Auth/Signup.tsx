@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { requestOtp } from "../../services/authService";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { requestOtp, verifyOtp } from "../../services/authService";
 import rightColumn from "../../assets/rightColumn.svg";
 import logo from "../../assets/logo.svg";
 import CustomDatePicker from "./CustomDatePicker";
+import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 const nameRegex = /^[A-Za-z][A-Za-z\s.'-]{1,}$/;
@@ -12,13 +13,17 @@ const Signup: React.FC = () => {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [dob, setDob] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
   const [error, setError] = useState("");
   const [fieldErrors, setFieldErrors] = useState<{
     name?: string;
     dob?: string;
     email?: string;
   }>({});
+
   const navigate = useNavigate();
+  const auth = useContext(AuthContext);
 
   const parseDob = (s: string) => {
     const t = Date.parse(s);
@@ -67,16 +72,24 @@ const Signup: React.FC = () => {
 
     try {
       await requestOtp(email.trim());
-      navigate("/verify-otp", {
-        state: { email: email.trim(), name: name.trim(), dob },
-      });
+      setOtpSent(true);
     } catch (err: any) {
       setError(err.response?.data?.error || "Failed to send OTP");
     }
   };
 
+  const handleVerifyOtp = async () => {
+    try {
+      const data = await verifyOtp({ email, otp, name, dob });
+      auth?.login(data.token, data.user);
+      navigate("/notes");
+    } catch (err: any) {
+      setError(err.response?.data?.error || "Invalid OTP");
+    }
+  };
+
   return (
-    <div className=" flex flex-col md:flex-row items-center justify-center bg-gray-100">
+    <div className="flex flex-col md:flex-row items-center justify-center bg-gray-100">
       <div className="flex flex-col w-full md:w-[591px] h-auto md:h-[1024px] p-6 md:p-8 gap-8">
         <div className="flex justify-center md:justify-start items-center md:gap-3 h-8 w-full md:mb-0">
           <img src={logo} alt="logo" />
@@ -84,11 +97,10 @@ const Signup: React.FC = () => {
         <div className="flex flex-col justify-center flex-1 w-full md:w-[527px] gap-5 md:px-16">
           <div className="text-center md:text-left gap-3">
             <h2 className="text-3xl font-bold font-sans">Sign up</h2>
-            <p className="text-gray-500 font-normal font-sans ">
+            <p className="text-gray-500 font-normal font-sans">
               Sign up to enjoy the feature of HD
             </p>
           </div>
-
           <div className="flex flex-col gap-5 w-full">
             <div className="relative">
               <input
@@ -122,7 +134,6 @@ const Signup: React.FC = () => {
                 <p className="mt-1 text-xs text-red-600">{fieldErrors.name}</p>
               )}
             </div>
-
             <div className="relative w-full">
               <CustomDatePicker
                 label="Date of Birth"
@@ -136,7 +147,6 @@ const Signup: React.FC = () => {
                 <p className="mt-1 text-xs text-red-600">{fieldErrors.dob}</p>
               )}
             </div>
-
             <div className="relative">
               <input
                 id="email"
@@ -172,23 +182,43 @@ const Signup: React.FC = () => {
 
             {error && <p className="text-sm text-red-600">{error}</p>}
 
-            <button
-              onClick={handleRequestOtp}
-              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
-            >
-              Get OTP
-            </button>
+            {!otpSent ? (
+              <button
+                onClick={handleRequestOtp}
+                className="w-full bg-custom-blue text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+              >
+                Get OTP
+              </button>
+            ) : (
+              <>
+                <div className="relative">
+                  <input
+                    id="otp"
+                    type="text"
+                    placeholder="Enter OTP"
+                    value={otp}
+                    onChange={(e) => setOtp(e.target.value)}
+                    className="w-full h-[52px] px-4 text-gray-700 bg-white border border-gray-300 rounded-lg outline-none focus:ring-1 focus:border-blue-500 focus:ring-blue-500 md:h-[59px]"
+                  />
+                </div>
+                <button
+                  onClick={handleVerifyOtp}
+                  className="w-full bg-custom-blue text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+                >
+                  Sign up
+                </button>
+              </>
+            )}
           </div>
 
           <p className="text-sm text-center font-sans font-normal text-gray-500">
-            Already have an account??{" "}
-            <a href="/login" className="text-blue-600 hover:underline">
+            Already have an account?{" "}
+            <a href="/login" className="text-custom-blue hover:underline">
               Sign in
             </a>
           </p>
         </div>
       </div>
-
       <div
         className="hidden md:flex items-center justify-center"
         style={{

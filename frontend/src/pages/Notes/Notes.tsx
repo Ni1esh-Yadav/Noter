@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { getNotes, createNote, deleteNote } from "../../services/notesService";
+import logo1 from "../../assets/logo1.svg";
+import remove from "../../assets/delete.svg";
 
 interface Note {
   id: string;
@@ -55,54 +57,51 @@ const Notes: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center p-6">
       <div className="w-full max-w-2xl flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800">
-          Welcome, {auth?.user?.name || auth?.user?.email}
+        <div className="flex gap-4">
+          <img src={logo1} alt="logo"></img>
+          <h1 className="text-xl font-semibold text-gray-800">Dashboard</h1>
+        </div>
+
+        <button onClick={handleLogout} className="text-custom-blue underline">
+          Sign Out
+        </button>
+      </div>
+
+      <div className="w-full max-w-2xl bg-white rounded-2xl shadow p-6 mb-6 text-center">
+        <h2 className="text-lg font-bold text-gray-800">
+          Welcome, {auth?.user?.name || "User"} !
         </h2>
-        <button
-          onClick={handleLogout}
-          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600"
-        >
-          Logout
-        </button>
+        <p className="text-gray-500 text-sm">
+          Email: {auth?.user?.email || "xxxxx@xxxx.com"}
+        </p>
       </div>
+      <button
+        onClick={handleAddNote}
+        disabled={!newNote.trim()}
+        className="w-full max-w-2xl py-3 mb-6 bg-custom-blue text-white rounded-lg shadow hover:bg-blue-700 transition "
+      >
+        Create Note
+      </button>
 
-      <div className="w-full max-w-2xl flex gap-2 mb-6">
-        <input
-          type="text"
-          placeholder="Write a note..."
-          value={newNote}
-          onChange={(e) => setNewNote(e.target.value)}
-          className="flex-1 p-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-        <button
-          onClick={handleAddNote}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
-        >
-          Add
-        </button>
-      </div>
-
-      <ul className="w-full max-w-2xl space-y-4">
+      <h1 className="w-full max-w-2xl text-left text-xl font-medium text-gray-800 mb-4">
+        Notes
+      </h1>
+      <div className="w-full max-w-2xl space-y-4">
         {notes.map((note) => (
-          <li
+          <div
             key={note.id}
-            className="flex justify-between items-center bg-white p-4 rounded-lg shadow-md"
+            className="flex justify-between items-center bg-white p-4 rounded-lg shadow hover:shadow-md transition"
           >
-            <div>
-              <p className="text-gray-700">{note.content}</p>
-              <span className="text-sm text-gray-400">
-                {new Date(note.createdAt).toLocaleString()}
-              </span>
-            </div>
+            <span className="text-gray-700">{note.content}</span>
             <button
               onClick={() => handleDelete(note.id)}
-              className="text-red-500 hover:text-red-700"
+              className="text-gray-400 hover:text-red-500 transition"
             >
-              ✕
+              <img src={remove} alt="delete icon" />
             </button>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 };
