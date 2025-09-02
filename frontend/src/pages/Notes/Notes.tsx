@@ -16,6 +16,7 @@ const Notes: React.FC = () => {
   const navigate = useNavigate();
   const [notes, setNotes] = useState<Note[]>([]);
   const [newNote, setNewNote] = useState("");
+  const [showInput, setShowInput] = useState(false);
 
   useEffect(() => {
     const fetchNotes = async () => {
@@ -31,10 +32,12 @@ const Notes: React.FC = () => {
 
   const handleAddNote = async () => {
     if (!newNote.trim()) return;
+
     try {
       const note = await createNote(newNote);
       setNotes([note, ...notes]);
       setNewNote("");
+      setShowInput(false);
     } catch (err) {
       console.error("Failed to create note", err);
     }
@@ -68,24 +71,54 @@ const Notes: React.FC = () => {
       </div>
 
       <div className="w-full max-w-2xl bg-white rounded-2xl shadow p-6 mb-6 text-center">
-        <h2 className="text-lg font-bold text-gray-800">
+        <h2 className="text-xl sm:text-lg font-bold text-gray-800">
           Welcome, {auth?.user?.name || "User"} !
         </h2>
-        <p className="text-gray-500 text-sm">
+        <p className="text-sm sm:text-base text-gray-500">
           Email: {auth?.user?.email || "xxxxx@xxxx.com"}
         </p>
       </div>
-      <button
-        onClick={handleAddNote}
-        disabled={!newNote.trim()}
-        className="w-full max-w-2xl py-3 mb-6 bg-custom-blue text-white rounded-lg shadow hover:bg-blue-700 transition "
-      >
-        Create Note
-      </button>
+      {!showInput ? (
+        <button
+          onClick={() => setShowInput(true)}
+          className="w-full max-w-2xl py-3 mb-6 bg-custom-blue text-white rounded-lg shadow hover:bg-blue-700 transition"
+        >
+          Create Note
+        </button>
+      ) : (
+        <div className="w-full max-w-2xl bg-white rounded-2xl shadow p-4 mb-6">
+          <textarea
+            value={newNote}
+            onChange={(e) => setNewNote(e.target.value)}
+            placeholder="Write your note here..."
+            className="w-full border border-gray-300 rounded-lg p-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-custom-blue mb-3"
+            rows={3}
+          />
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={() => setShowInput(false)}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleAddNote}
+              disabled={!newNote.trim()}
+              className="px-4 py-2 bg-custom-blue text-white rounded-lg shadow hover:bg-blue-700 transition "
+            >
+              Save
+            </button>
+          </div>
+        </div>
+      )}
+      {notes.length > 0 ? (
+        <h1 className="w-full max-w-2xl text-left text-xl font-medium text-gray-800 mb-4">
+          Notes
+        </h1>
+      ) : (
+        <h1>No Notes Availabe Click on Create Notes to add some notes</h1>
+      )}
 
-      <h1 className="w-full max-w-2xl text-left text-xl font-medium text-gray-800 mb-4">
-        Notes
-      </h1>
       <div className="w-full max-w-2xl space-y-4">
         {notes.map((note) => (
           <div
