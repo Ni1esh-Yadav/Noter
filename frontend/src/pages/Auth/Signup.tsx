@@ -123,7 +123,7 @@ const Signup: React.FC = () => {
               />
               <label
                 htmlFor="name"
-                className="absolute left-4 px-1 text-gray-500 bg-white transform -translate-y-1/2 transition-all
+                className="absolute left-4 text-gray-500 bg-white transform -translate-y-1/2 transition-all
                          peer-placeholder-shown:top-1/2 peer-placeholder-shown:left-4 peer-placeholder-shown:-translate-y-1/2
                          peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:left-4 peer-focus:-translate-y-1/2
                          peer-focus:text-sm peer-focus:text-blue-500"
@@ -168,7 +168,7 @@ const Signup: React.FC = () => {
               />
               <label
                 htmlFor="email"
-                className="absolute left-4 px-1 text-gray-500 bg-white transform -translate-y-1/2 transition-all
+                className="absolute left-4 text-gray-500 bg-white transform -translate-y-1/2 transition-all
                          peer-placeholder-shown:top-1/2 peer-placeholder-shown:left-4 peer-placeholder-shown:-translate-y-1/2
                          peer-placeholder-shown:text-base peer-focus:top-0 peer-focus:left-4 peer-focus:-translate-y-1/2
                          peer-focus:text-sm peer-focus:text-blue-500"
