@@ -42,10 +42,14 @@ export const updateNote = async (req: AuthRequest, res: Response): Promise<void>
     const { id } = req.params;
     const { content } = req.body;
 
-    const note = await prisma.note.updateMany({
-      where: { id, userId: req.user!.userId },
-      data: { content },
-    });
+   const note = await prisma.note.updateMany({
+  where: {
+    ...(id ? { id } : {}), 
+    userId: req.user!.userId,
+  },
+  data: { content },
+});
+
 
     if (note.count === 0) {
       res.status(404).json({ error: "Note not found" });
@@ -63,8 +67,12 @@ export const deleteNote = async (req: AuthRequest, res: Response): Promise<void>
     const { id } = req.params;
 
     const note = await prisma.note.deleteMany({
-      where: { id, userId: req.user!.userId },
-    });
+  where: {
+    ...(id !== undefined ? { id } : {}), 
+    userId: req.user!.userId,
+  },
+});
+
 
     if (note.count === 0) {
       res.status(404).json({ error: "Note not found" });
