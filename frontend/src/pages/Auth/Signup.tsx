@@ -62,7 +62,6 @@ const Signup: React.FC = () => {
   };
 
   const handleRequestOtp = async () => {
-    setOtpSent(true);
     const errs = validateForm();
     if (Object.keys(errs).length) {
       setFieldErrors(errs);
@@ -70,6 +69,7 @@ const Signup: React.FC = () => {
     }
     setFieldErrors({});
     setError("");
+    setOtpSent(true);
 
     try {
       await requestOtp(email.trim());
@@ -182,14 +182,7 @@ const Signup: React.FC = () => {
 
             {error && <p className="text-sm text-red-600">{error}</p>}
 
-            {!otpSent ? (
-              <button
-                onClick={handleRequestOtp}
-                className="w-full bg-custom-blue text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
-              >
-                Get OTP
-              </button>
-            ) : (
+            {otpSent ? (
               <>
                 <div className="relative">
                   <input
@@ -201,6 +194,7 @@ const Signup: React.FC = () => {
                     className="w-full h-[52px] px-4 text-gray-700 bg-white border border-gray-300 rounded-lg outline-none focus:ring-1 focus:border-blue-500 focus:ring-blue-500 md:h-[59px]"
                   />
                 </div>
+
                 <button
                   onClick={handleVerifyOtp}
                   className="w-full bg-custom-blue text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
@@ -208,11 +202,19 @@ const Signup: React.FC = () => {
                   Sign up
                 </button>
               </>
+            ) : (
+              <button
+                onClick={handleRequestOtp}
+                disabled={Object.keys(fieldErrors).length > 0}
+                className="w-full bg-custom-blue text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+              >
+                Get OTP
+              </button>
             )}
           </div>
           {otpSent && (
             <h1 className="text-custom-blue font-semibold font-sans">
-              Otp sent successfully if not wait 15 sec!!
+              OTP sent successfully! If not received, please wait 15 sec.
             </h1>
           )}
           <p className="text-sm text-center font-sans font-normal text-gray-500">

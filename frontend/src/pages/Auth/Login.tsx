@@ -18,7 +18,6 @@ const Login: React.FC = () => {
   const auth = useContext(AuthContext);
 
   const handleRequestOtp = async () => {
-    setOtpSent(true);
     if (!email.trim()) {
       setError("Email is required");
       return;
@@ -27,6 +26,7 @@ const Login: React.FC = () => {
       return;
     }
     setError("");
+    setOtpSent(true);
 
     try {
       await requestOtp(email.trim());
