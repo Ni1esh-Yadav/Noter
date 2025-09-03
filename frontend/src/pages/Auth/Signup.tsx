@@ -62,6 +62,7 @@ const Signup: React.FC = () => {
   };
 
   const handleRequestOtp = async () => {
+    setOtpSent(true);
     const errs = validateForm();
     if (Object.keys(errs).length) {
       setFieldErrors(errs);
@@ -72,7 +73,6 @@ const Signup: React.FC = () => {
 
     try {
       await requestOtp(email.trim());
-      setOtpSent(true);
     } catch (err: any) {
       setError(err.response?.data?.error || "Failed to send OTP");
     }
@@ -210,7 +210,11 @@ const Signup: React.FC = () => {
               </>
             )}
           </div>
-
+          {otpSent && (
+            <h1 className="text-custom-blue font-semibold font-sans">
+              Otp sent successfully if not wait 15 sec!!
+            </h1>
+          )}
           <p className="text-sm text-center font-sans font-normal text-gray-500">
             Already have an account?{" "}
             <a href="/login" className="text-custom-blue hover:underline">
