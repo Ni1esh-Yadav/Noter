@@ -205,7 +205,7 @@ const Signup: React.FC = () => {
             ) : (
               <button
                 onClick={handleRequestOtp}
-                disabled={Object.keys(fieldErrors).length > 0}
+                // disabled={Object.keys(fieldErrors).length > 0}
                 className="w-full bg-custom-blue text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
               >
                 Get OTP
